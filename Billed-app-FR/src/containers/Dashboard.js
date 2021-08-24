@@ -44,7 +44,7 @@ export const card = (bill) => {
         <span> ${bill.amount} € </span>
       </div>
       <div class='date-type-container'>
-        <span> ${formatDate(bill.date)} </span>
+        <span> ${bill.date} </span>
         <span> ${bill.type} </span>
       </div>
     </div>
@@ -146,6 +146,7 @@ export default class {
     }
 
     bills.forEach(bill => {
+      $(`#open-bill${bill.id}`).off('click')
       $(`#open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills))
     })
 
