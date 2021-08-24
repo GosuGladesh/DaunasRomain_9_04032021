@@ -1,5 +1,6 @@
 
 import { ROUTES_PATH } from '../constants/routes.js'
+import { filteredBills } from './Dashboard.js'
 import Logout from "./Logout.js"
 
 export default class NewBill {
@@ -17,6 +18,11 @@ export default class NewBill {
   }
   handleChangeFile = e => {
     const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
+    //Debug attempt
+    if( file.type != "image/jpeg" && file.type != "image/png"){
+      document.querySelector(`input[data-testid="file"]`).value = "";
+      return;
+    }
     const filePath = e.target.value.split(/\\/g)
     const fileName = filePath[filePath.length-1]
     this.firestore
