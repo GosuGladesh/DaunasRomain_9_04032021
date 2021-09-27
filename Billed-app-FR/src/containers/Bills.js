@@ -10,6 +10,7 @@ export default class {
     const buttonNewBill = document.querySelector(`button[data-testid="btn-new-bill"]`)
     if (buttonNewBill) buttonNewBill.addEventListener('click', this.handleClickNewBill)
     const iconEye = document.querySelectorAll(`div[data-testid="icon-eye"]`)
+    /* istanbul ignore else */
     if (iconEye) iconEye.forEach(icon => {
       icon.addEventListener('click', (e) => this.handleClickIconEye(icon))
     })
@@ -28,6 +29,7 @@ export default class {
   }
 
   // not need to cover this function by tests
+  /* istanbul ignore next */
   getBills = () => {
     const userEmail = localStorage.getItem('user') ?
       JSON.parse(localStorage.getItem('user')).email : ""

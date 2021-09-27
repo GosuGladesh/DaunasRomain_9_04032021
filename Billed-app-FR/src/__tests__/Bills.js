@@ -5,32 +5,14 @@ import { bills } from "../fixtures/bills.js"
 import LoadingPage from "../views/LoadingPage.js"
 import ErrorPage from "../views/ErrorPage.js"
 import Bills from "../containers/Bills.js"
-import Router from "../app/Router.js"
 import { localStorageMock } from "../__mocks__/localStorage.js"
 import { ROUTES, ROUTES_PATH } from "../constants/routes.js"
 import firebase from "../__mocks__/firebase"
-import firestore from '../app/Firestore.js'
-
-
+import Router from "../app/Router.js"
+import {initializeApp} from 'firebase/app'
 describe("Given I am connected as an employee", () => {
 
   describe("When I am on Bills Page", () => {
-    test("Then bill icon in vertical layout should be highlighted", () => {
-      
-      
-      document.body.innerHTML =`<div id="root"></div>`;
-
-      Object.defineProperty(window, 'localStorage', { value: localStorageMock })
-      window.localStorage.setItem('user', JSON.stringify(
-        {type:"Employee"}
-      ))
-     
-      window.location.hash = '#employee/bills';
-      Router();
-      const icon = screen.getByTestId('icon-window')
-      expect(icon.className).toBe('active-icon')
-
-    })
     test("Then bills should be ordered from earliest to latest", () => {
       const html = BillsUI({ data: bills })
       document.body.innerHTML = html
@@ -54,14 +36,16 @@ describe("Given I am connected as an employee", () => {
 
   describe("When I click Icon", () => {
     test("Then Modal should render",  () => {
+
         const ui = BillsUI({data : bills});
         document.body.innerHTML = ui;
+
         const onNavigate = (pathname) => {
           document.body.innerHTML = ROUTES({ pathname })
         }
 
         const myBill = new Bills({
-          document, onNavigate, firestore: firestore, localStorage: window.localStorage
+          document, onNavigate, firestore: null, localStorage: window.localStorage
         })
         //mock boostrap .modal("show") function
         $.fn.modal = jest.fn().mockImplementation( () => {$('#modaleFile').css("display", "block");});
@@ -90,7 +74,7 @@ describe("Given I am connected as an employee", () => {
         }
 
         const mybills = new Bills({
-          document, onNavigate, firestore: firestore, localStorage: window.localStorage
+          document, onNavigate, firestore: null, localStorage: window.localStorage
         })
 
         const handleClickNewBill = jest.fn((e) => mybills.handleClickNewBill(e))
@@ -134,7 +118,7 @@ describe("Given I am connected as an employee", () => {
   // GET BILLS FROM FIREBASE OR FIXTURES THEN CHECK IF BILLS DISPLAYED MATCH
   describe("Given I am a user connected as Employee", () => {
     describe("When I navigate to Bills", () => {
-      test("fetches bills from mock API GET", async () => {
+      test("then it shouldfetches bills from mock API GET", async () => {
          const getSpy = jest.spyOn(firebase, "get")
          const bills = await firebase.get()
          expect(getSpy).toHaveBeenCalledTimes(1)
@@ -145,7 +129,7 @@ describe("Given I am connected as an employee", () => {
          
          expect(lines.length).toBe(5) //TH + 4 bills
       })
-      test("fetches bills from an API and fails with 404 message error", async () => {
+      test("then it should fetches bills from an API and fails with 404 message error", async () => {
         firebase.get.mockImplementationOnce(() =>
           Promise.reject(new Error("Erreur 404"))
         )
@@ -154,7 +138,7 @@ describe("Given I am connected as an employee", () => {
         const message = await screen.getByText(/Erreur 404/)
         expect(message).toBeTruthy()
       })
-      test("fetches messages from an API and fails with 500 message error", async () => {
+      test("then it should fetches messages from an API and fails with 500 message error", async () => {
         firebase.get.mockImplementationOnce(() =>
           Promise.reject(new Error("Erreur 500"))
         )

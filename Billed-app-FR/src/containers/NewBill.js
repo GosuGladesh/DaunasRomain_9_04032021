@@ -25,6 +25,7 @@ export default class NewBill {
     }
     const filePath = e.target.value.split(/\\/g)
     const fileName = filePath[filePath.length-1]
+    
     this.firestore
       .storage
       .ref(`justificatifs/${fileName}`)
@@ -34,7 +35,9 @@ export default class NewBill {
         this.fileUrl = url
         this.fileName = fileName
       })
-  }
+  
+    }
+      
   handleSubmit = e => {
     e.preventDefault()
     console.log('e.target.querySelector(`input[data-testid="datepicker"]`).value', e.target.querySelector(`input[data-testid="datepicker"]`).value)
@@ -57,6 +60,7 @@ export default class NewBill {
   }
 
   // not need to cover this function by tests
+  /* istanbul ignore next */
   createBill = (bill) => {
     if (this.firestore) {
       this.firestore

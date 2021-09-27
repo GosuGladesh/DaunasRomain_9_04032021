@@ -2,7 +2,7 @@ export const localStorageMock = (function() {
   let store = {};
   return {
     getItem: function(key) {
-      return JSON.stringify(store[key])
+      return (store[key]) //removed JSON.stringify
     },
     setItem: function(key, value) {
       store[key] = value.toString()
